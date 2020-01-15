@@ -1,0 +1,5 @@
+baseURL = "http://juan.energy/"
+languageCode = "en-us"
+title = "Some Code Projects"
+theme = "ananke"
+publishdir = ".site"

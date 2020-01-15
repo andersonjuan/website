@@ -1,5 +1,4 @@
 baseURL = "http://juan.energy/"
 languageCode = "en-us"
-title = "Some Code Projects"
+title = "Coding blog"
 theme = "ananke"
-publishdir = ".site"

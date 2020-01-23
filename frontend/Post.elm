@@ -1,8 +1,9 @@
-module Page.Post exposing (Post)
+module Post exposing (Post, decode, render)
 
 -- elm packages
 import Markdown
 import Html exposing (..)
+
 
 -- website imports
 import Asset exposing (Asset(..), post)
@@ -28,12 +29,12 @@ options =
 
 -- decode
 -- takes an Asset and returns at as a Post if possible
-decode : Asset -> Maybe Post
+decode : Asset -> Post
 decode (Asset filepath) =
     -- I want to expand assets to images so use case here
-    Just { title = ""
-         , date = ""
-         , content = filepath }
+    { title = ""
+    , date = ""
+    , content = filepath }
 
 
 -- render takes the post
@@ -43,3 +44,9 @@ render post =
     case post of
         ({ title, date, content }) ->
             Markdown.toHtmlWith options [] content
+
+-- load takes the String and sends a request
+-- to the server to get the related markdown post
+load : String -> Cmd msg
+load url =
+    Debug.todo "TODO"

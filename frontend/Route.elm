@@ -14,5 +14,5 @@ routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
         [ map BlogPost (s "blog" </> int </> string)
-        , map BlogQuery (s "blog" <?> Query.string "q")
+        , map BlogQuery (s "blog" <?> Query.string "post")
         ]

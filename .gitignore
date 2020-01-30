@@ -16,3 +16,6 @@
 
 # Website production
 .prod
+
+# TLS certs
+*.key

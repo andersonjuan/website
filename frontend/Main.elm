@@ -12,6 +12,7 @@ import Http
 import Post as Post
 import Route exposing (Route, routeParser)
 import Asset
+import Json.Decode exposing (Decoder, string, field)
 
 -- MAIN
 -- Mandatory main function for the Single-Page Application
@@ -35,7 +36,7 @@ main =
 -- Page represents the type of Pages we can have
 type Page
     = Home
-    | Blog
+    | Post
 
 type alias Model =
   { page : Page
@@ -54,7 +55,7 @@ init flags url key =
 
 -- Msg type, holds the possible message for Cmd
 type Msg
-  = GotPost (Result Http.Error String) -- recieved a post from the server
+  = Blog (Result Http.Error String) -- recieved a post from the server
   | LinkClicked Browser.UrlRequest -- a link was clinked
   | UrlChanged Url.Url -- the url changed
   | NoOp -- nothing
@@ -77,14 +78,14 @@ update msg model =
         UrlChanged url ->
             stepUrl url model
 
-        GotPost result ->
+        Blog result ->
             -- see if the server responded with the page
             case result of
-                Ok url ->
-                    (Success url, Cmd.none)
+                Ok post ->
+                    (model, Cmd.none)
 
                 Err _ ->
-                    (Failure, Cmd.none)
+                    (model, Cmd.none)
 
         NoOp -> (model, Cmd.none)
 
@@ -106,8 +107,8 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Super Cool Title"
     , body =
-        [ header [] []
-        , section [] [ Post.render asset ]
+        [ renderHeader
+        , section [] []
         ]
     }
 
@@ -117,9 +118,15 @@ viewLink : String -> Html msg
 viewLink path =
   li [] [ a [ href path ] [ text path ] ]
 
--- renderHeader
--- renders the headers of the site
-
+-- renderHeader renders the headers of the site
+-- Defines the header of a page or section.
+-- It often contains a logo, the title of the web site, and a navigational table of content.
+renderHeader : Html msg
+renderHeader =
+    header [type_ "menu"]
+    [ h3 [] [text "Super Cool Title"
+    , nav [] []
+    ]
 
 -- Routing
 
@@ -129,3 +136,22 @@ viewLink path =
 stepUrl : Url.Url -> Model -> (Model, Cmd Msg)
 stepUrl url model =
     Debug.todo "TODO"
+
+
+
+-- HTTP Interactions
+
+-- fetchBlog takes the string representing the URL
+-- and attempts to grab the page
+fetchBlog : String -> Cmd Msg
+fetchBlog blogUrl =
+    Http.get
+    { url = blogUrl
+    , expect = Http.expectJson Blog decodeMarkdown
+    }
+
+-- decodeMarkdown unwraps the markdown string from
+-- the recieved JSON
+decodeMarkdown : Decoder String
+decodeMarkdown =
+    field "text" string

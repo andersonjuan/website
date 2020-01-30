@@ -18,4 +18,4 @@ type Asset
 -- retrieves the given post
 post : String -> Asset
 post filename =
-    Asset ("/static/blog/" ++ filename)
+    Asset ("/assets/blog/" ++ filename)

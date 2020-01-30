@@ -20,24 +20,37 @@ func init() {
     build = newBuildEnv()
 }
 
+// **************************************
+
 //
 func Build() error {
 
 }
+
+func ElmBuild() error {
+    
+}
+
+// **************************************
 
 //
 func Deploy() error {
 
 }
 
+// **************************************
+
 //
 func Release() error {
 
 }
 
+// **************************************
+// **************************************
+
 // struct for holding the build information
 type buildEnv struct {
-
+    directory
 }
 
 // populate the build environment
